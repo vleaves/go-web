@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传表单</title>
+</head>
+<body>
+    <!-- 核心表单代码：POST提交、支持文件上传、携带URL查询参数 -->
+    <form method="post" action="http://localhost:8080/process?hello=world&thread=123" enctype="multipart/form-data">
+        <!-- 文本输入框1 -->
+        <input type="text" name="hello" value="sau sheong">
+        <br>
+        <!-- 文本输入框2 -->
+        <input type="text" name="post" value="456">
+        <br>
+        <!-- 文件选择控件 -->
+        <input type="file" name="uploaded">
+        <br>
+        <!-- 提交按钮 -->
+        <button type="submit">提交表单</button>
+    </form>
+</body>
+</html>

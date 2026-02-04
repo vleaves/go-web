@@ -1,0 +1,19 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func Process(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(1024)
+	fileHeader := r.MultipartForm.File["uploaded"][0]
+	file, err := fileHeader.Open()
+	if err == nil {
+		data, err := io.ReadAll(file)
+		if err == nil {
+			fmt.Fprintln(w, string(data))
+		}
+	}
+}
