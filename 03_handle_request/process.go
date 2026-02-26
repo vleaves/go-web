@@ -7,9 +7,10 @@ import (
 )
 
 func Process(w http.ResponseWriter, r *http.Request) {
-	r.ParseMultipartForm(1024)
-	fileHeader := r.MultipartForm.File["uploaded"][0]
-	file, err := fileHeader.Open()
+	// r.ParseMultipartForm(1024)
+	// fileHeader := r.MultipartForm.File["uploaded"][0]
+	// file, err := fileHeader.Open()
+	file, _, err := r.FormFile("uploaded")
 	if err == nil {
 		data, err := io.ReadAll(file)
 		if err == nil {
