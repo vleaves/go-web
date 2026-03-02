@@ -11,5 +11,6 @@ func main() {
 	http.HandleFunc("/process", Process)
 	http.HandleFunc("/process2", Process2)
 	http.HandleFunc("/process3", Process3)
+	http.HandleFunc("/process4", Process4)
 	server.ListenAndServe()
 }
