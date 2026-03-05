@@ -17,7 +17,8 @@ type Post struct {
 var Db *sql.DB
 
 func init() {
-	Db, err := sql.Open("sqlite", "posts.db")
+	var err error
+	Db, err = sql.Open("sqlite", "posts.db")
 	if err != nil {
 		panic(err)
 	}
@@ -59,15 +60,15 @@ func GetPost(id int) (post Post, err error) {
 
 func (post *Post) Create() (err error) {
 	statement := "insert into posts (content, author) values (?, ?)"
-	_, err = Db.Exec(statement, post.Content, post.Author)
+	result, err := Db.Exec(statement, post.Content, post.Author)
 	if err != nil {
 		return fmt.Errorf("插入失败: %w", err)
 	}
-	// id, err := result.LastInsertId()
-	// if err != nil {
-	// 	return fmt.Errorf("获取ID失败: %w", err)
-	// }
-	// post.Id = int(id)
+	id, err := result.LastInsertId()
+	if err != nil {
+		return fmt.Errorf("获取ID失败: %w", err)
+	}
+	post.Id = int(id)
 	return
 }
 
@@ -88,21 +89,26 @@ func main() {
 
 	readPost, _ := GetPost(post.Id)
 	fmt.Println(readPost)
-	// readPost.Content = "Bonjour Monde!"
-	// readPost.Author = "Pierre"
-	// if err := readPost.Update(); err != nil {
-	// 	log.Fatal("更新失败:", err)
-	// }
-	// fmt.Println("更新后:", readPost)
-	// posts, err := Posts(10) // 显式传入 limit
-	// if err != nil {
-	// 	log.Fatal("查询列表失败:", err)
-	// }
-	// fmt.Println("当前帖子列表:", posts)
+	readPost.Content = "Bonjour Monde!"
+	readPost.Author = "Pierre"
+	if err := readPost.Update(); err != nil {
+		log.Fatal("更新失败:", err)
+	}
+	fmt.Println("更新后:", readPost)
+	posts, err := Posts(10) // 显式传入 limit
+	if err != nil {
+		log.Fatal("查询列表失败:", err)
+	}
+	fmt.Println("当前帖子列表:", posts)
 
-	// // 删除
-	// if err := readPost.Delete(); err != nil {
-	// 	log.Fatal("删除失败:", err)
-	// }
-	// fmt.Println("帖子已删除")
+	// 删除
+	if err := readPost.Delete(); err != nil {
+		log.Fatal("删除失败:", err)
+	}
+	fmt.Println("帖子已删除")
+	postsD, err := Posts(10) // 显式传入 limit
+	if err != nil {
+		log.Fatal("查询列表失败:", err)
+	}
+	fmt.Println("当前帖子列表:", postsD)
 }
