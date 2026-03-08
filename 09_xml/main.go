@@ -35,4 +35,24 @@ func main() {
 	var post Post
 	xml.Unmarshal(xmlData, &post)
 	fmt.Println(post)
+
+	post_xml := Post{
+		Id : "1",
+		Content: "Hello World!",
+		Author: Author{
+			Id: "2",
+			Name: "Sau Sheong",
+		},
+	}
+	//output, err := xml.Marshal(&post_xml)
+	output, err := xml.MarshalIndent(&post_xml, "", "\t")
+	if err != nil {
+		fmt.Println("Error marshaling to XML:", err)
+		return
+	}
+	err = os.WriteFile("post_xml.xml", []byte(xml.Header + string(output)), 0644)
+	if err != nil {
+		fmt.Println("Error writing XML to file:", err)
+		return
+	}
 }
